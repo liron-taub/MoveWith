@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Match extends AsyncTask<Void, Void, Void> {
+public class Match {
     Driver driver;
     Hitchhiker hitchhiker;
 
@@ -40,8 +40,6 @@ public class Match extends AsyncTask<Void, Void, Void> {
     public Match(Driver driver, Hitchhiker hitchhiker) {
         this.driver = driver;
         this.hitchhiker = hitchhiker;
-
-        this.execute();
     }
 
     private void distance(Address address1, Address address2, String name) {
@@ -69,23 +67,70 @@ public class Match extends AsyncTask<Void, Void, Void> {
             else
                 destDist = response.getJSONObject("route").getDouble("distance");
         } catch (Exception ex) {
-            System.out.println(ex);// צריך להוסיף תהליכון מעפן שיסדר הכל!!!
+            System.out.println(ex);
         }
     }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
+    public void calculate() {
         distance(driver.source, hitchhiker.source, "srcDist");
         distance(driver.destination, hitchhiker.destination, "destDist");
-        return null;
+        ageDist = Math.abs(driver.age - hitchhiker.age);
+        timeDist = Math.abs(driver.time.getTime() - hitchhiker.time.getTime());
+        gender = driver.gender.equals(hitchhiker.gender) ? 0 : 1; // if מקוצר עבור הוספת המין בשקלול הסופי
+    }
+
+    public double getSrcDist() {
+        return srcDist;
+    }
+
+    public double getDestDist() {
+        return destDist;
+    }
+
+    public void setSrcDist(double srcDist) {
+        this.srcDist = srcDist;
+    }
+
+    public void setDestDist(double destDist) {
+        this.destDist = destDist;
+    }
+
+    public double getAgeDist() {
+        return ageDist;
+    }
+
+    public void setAgeDist(double ageDist) {
+        this.ageDist = ageDist;
+    }
+
+    public double getTimeDist() {
+        return timeDist;
+    }
+
+    public void setTimeDist(double timeDist) {
+        this.timeDist = timeDist;
+    }
+
+    public double getGrade() {
+        return srcDist * 0.2 + destDist * 0.2 + ageDist * 0.1 + gender * 0.1 + timeDist * 0.4;
+
+    }
+
+    public Driver getDriver() {
+        return driver;
     }
 
     @Override
-    protected void onPostExecute(Void unused) {
-        super.onPostExecute(unused);
-
-        ageDist = Math.abs(driver.age - hitchhiker.age);
-        timeDist = Math.abs(driver.time.getTime() - hitchhiker.time.getTime());
-        gender = driver.gender.equals(hitchhiker.gender) ? 0 : 100; // if מקוצר עבור הוספת המין בשקלול הסופי
+    public String toString() {
+        return "Match{" +
+                "driver=" + driver +
+                ", hitchhiker=" + hitchhiker +
+                ", srcDist=" + srcDist +
+                ", destDist=" + destDist +
+                ", ageDist=" + ageDist +
+                ", timeDist=" + timeDist +
+                ", gender=" + gender +
+                ", grade=" + grade +
+                '}';
     }
 }

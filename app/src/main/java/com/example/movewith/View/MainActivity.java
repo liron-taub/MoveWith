@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -18,9 +19,12 @@ import com.example.movewith.Model.Driver;
 import com.example.movewith.Model.FirebaseManagement;
 import com.example.movewith.Model.Hitchhiker;
 import com.example.movewith.Model.Match;
+import com.example.movewith.Model.MatchCalculator;
 import com.example.movewith.R;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button lastDrive;
@@ -71,13 +75,31 @@ public class MainActivity extends AppCompatActivity {
 
         Address driverSrc = new Address("חשמונאים", "הכרמל", 20);
         Address driverDest = new Address("חשמונאים", "המוריה", 2);
-        Driver driver1 = new Driver("", "זכר", 30, "", 50, new Date(26, 11, 2021, 13, 30, 0), driverSrc, driverDest);
+        Driver driver1 = new Driver("אבג", "זכר", 30, "123456789", 50, new Date(26, 11, 2021, 13, 30, 0), driverSrc, driverDest);
 
-        Address hitSrc = new Address("חשמונאים", "הכרמל", 26);
+        Address hitSrc = new Address("רעות", "תומר", 26);
         Address hitDest = new Address("חשמונאים", "המוריה", 1);
-        Hitchhiker hitchhiker1 = new Hitchhiker("", "זכר", 20, "", new Date(26, 11, 2021, 13, 30, 0), hitSrc, hitDest);
+        Hitchhiker hitchhiker1 = new Hitchhiker("", "זכר", 20, "09876543", new Date(26, 11, 2021, 13, 30, 0), hitSrc, hitDest);
 
-        Match match = new Match(driver1, hitchhiker1);
+        Address driverSrc2 = new Address("חשמונאים", "היצהר", 1);
+        Address driverDest2 = new Address("חשמונאים", "הכרמל", 16);
+        Driver driver2 = new Driver("שדגכע", "זכר", 50, "234567", 11, new Date(26, 11, 2021, 13, 30, 0), driverSrc2, driverDest2);
+
+        Address driverSrc3 = new Address("ירושלים", "הוועד הלאומי", 21);
+        Address driverDest3 = new Address("חשמונאים", "המוריה", 26);
+        Driver driver3 = new Driver("דגכע", "זכר", 22, "34567", 23, new Date(26, 11, 2021, 15, 30, 0), driverSrc3, driverDest3);
+
+
+        Match match1 = new Match(driver1, hitchhiker1);
+        Match match2 = new Match(driver2, hitchhiker1);
+        Match match3 = new Match(driver3, hitchhiker1);
+        ArrayList<Match> matches = new ArrayList<>();
+        matches.add(match1);
+        matches.add(match2);
+        matches.add(match3);
+
+        MatchCalculator matchCalculator = new MatchCalculator(matches, this);
+        matchCalculator.execute();
     }
 
     public void refreshView() {

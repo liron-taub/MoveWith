@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.movewith.Model.Driver;
+import com.example.movewith.Model.Match;
+import com.example.movewith.Model.MatchCalculator;
 import com.example.movewith.R;
 
 import java.util.ArrayList;
@@ -20,21 +23,14 @@ public class Prefer extends AppCompatActivity {
         setContentView(R.layout.activity_prefer);
         getSupportActionBar().setTitle("ההתאמות שנמצאו עבורך...");
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("name", "נופר");
-        map.put("phone", "0527089552");
-        map.put("location", "חשמונאים");
-
-        List<HashMap<String, String>> list = new ArrayList<>();
-        list.add(map);
-        list.add(map);
-        list.add(map);
-        list.add(map);
-        list.add(map);
+        List<Driver> drivers = new ArrayList<>();
+        for (Match match:  MatchCalculator.matches) {
+            drivers.add(match.getDriver());
+        }
 
         RecyclerView recyclerView = findViewById(R.id.all_match);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MatchAdapter adapter = new MatchAdapter(this, list);
+        MatchAdapter adapter = new MatchAdapter(this, drivers);
         recyclerView.setAdapter(adapter);
     }
 }

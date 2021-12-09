@@ -9,18 +9,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.movewith.Model.Driver;
 import com.example.movewith.R;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
-    private List<HashMap<String, String>> mData;
+    private List<Driver> mData;
     private LayoutInflater mInflater;
     private Context context;
 
     // data is passed into the constructor
-    MatchAdapter(Context context, List<HashMap<String, String>> data) {
+    MatchAdapter(Context context, List<Driver> data) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
@@ -40,7 +41,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        HashMap<String, String> current = mData.get(position);
+        Driver current = mData.get(position);
         holder.setContent(current);
     }
 
@@ -52,7 +53,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, phone, location;
 
         ViewHolder(View itemView) {
@@ -62,10 +63,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             location = itemView.findViewById(R.id.location);
         }
 
-        public void setContent(HashMap<String, String> map) {
-            name.setText(map.get("name"));
-            phone.setText(map.get("phone"));
-            location.setText(map.get("location"));
+        public void setContent(Driver driver) {
+            name.setText(driver.fullName);
+            phone.setText(driver.phoneNumber);
+            location.setText(driver.source.toString());
         }
     }
 }
