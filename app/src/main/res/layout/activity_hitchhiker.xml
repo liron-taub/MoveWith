@@ -146,7 +146,7 @@
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/steet_dest"
+                android:id="@+id/street_dest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

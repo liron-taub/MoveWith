@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.movewith.Model.Driver;
 import com.example.movewith.R;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +32,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.match_row, parent, false);
-        view.setOnClickListener(v -> {
-            Intent myIntent = new Intent(context, Finish.class);
-            context.startActivity(myIntent);
-        });
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(viewHolder);
+        return viewHolder;
     }
 
     // binds the data to the TextView in each row
@@ -53,20 +52,35 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, phone, location;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView name, time, src, dest, age, price;
+        Driver driver;
 
         ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
-            phone = itemView.findViewById(R.id.phone_number);
-            location = itemView.findViewById(R.id.location);
+            src = itemView.findViewById(R.id.src);
+            dest = itemView.findViewById(R.id.dest);
+            age = itemView.findViewById(R.id.age);
+            time = itemView.findViewById(R.id.time);
+            price = itemView.findViewById(R.id.price);
         }
 
         public void setContent(Driver driver) {
-            name.setText(driver.fullName);
-            phone.setText(driver.phoneNumber);
-            location.setText(driver.source.toString());
+            this.driver = driver;
+            name.setText(driver.fullName + ",");
+            src.setText(driver.source.toString());
+            dest.setText(driver.destination.toString());
+            age.setText((driver.gender.equals("זכר") ? " בן " : " בת ") + driver.age);
+            time.setText(new SimpleDateFormat("kk:mm").format(driver.time));
+            price.setText(driver.price + "₪");
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent myIntent = new Intent(context, Finish.class);
+            myIntent.putExtra("driver", this.driver);
+            context.startActivity(myIntent);
         }
     }
 }

@@ -65,5 +65,8 @@ public class HitchhikerActivity extends AppCompatActivity {
 
         Hitchhiker hitchhiker = new Hitchhiker(fullName, gender, age, phoneNumber, time, source, destination);
 
+        Intent intent = new Intent(this, Prefer.class);
+        intent.putExtra("hitchhiker", hitchhiker);
+        startActivity(intent);
     }
 }

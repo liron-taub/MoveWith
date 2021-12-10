@@ -1,8 +1,9 @@
 package com.example.movewith.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Hitchhiker {
+public class Hitchhiker implements Serializable {
         public String fullName;
         public String gender;
         public int age;

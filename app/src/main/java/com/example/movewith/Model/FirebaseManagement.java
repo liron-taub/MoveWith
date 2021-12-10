@@ -16,7 +16,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class FirebaseManagement {
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -61,6 +63,18 @@ public class FirebaseManagement {
                         Control.refreshView();
                     }
                 }
+            }
+        });
+    }
+
+    public static void downloadDrivers() {
+        db.collection("drivers").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                List<Driver> drivers = task.getResult().toObjects(Driver.class);
+                Control.findMatch(drivers);
+            }
+            else {
+                Control.findMatch(new ArrayList<>());
             }
         });
     }

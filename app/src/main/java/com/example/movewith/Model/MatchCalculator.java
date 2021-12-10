@@ -4,21 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.example.movewith.Control.Control;
 import com.example.movewith.View.Prefer;
 
 import java.util.List;
 
-public class MatchCalculator extends AsyncTask<Void, Void, Void> {
-    public static List<Match> matches;
-    private Context context;
-
-    public MatchCalculator(List<Match> matches, Context context) {
-        this.matches = matches;
-        this.context = context;
-    }
-
+public class MatchCalculator extends AsyncTask<List<Match>, Void, List<Match>> {
+    // פותח תהליכון חדש ומריץ קריאות לאינטרנט בנפרד ומונע קריסה
+    @SafeVarargs
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected final List<Match> doInBackground(List<Match>... params) {
+        List<Match> matches = params[0];
         double maxSrc = 0, maxDest = 0;
         double maxTime = 0, maxAge = 0;
         for (Match match : matches) {
@@ -31,7 +27,6 @@ public class MatchCalculator extends AsyncTask<Void, Void, Void> {
                 maxAge = match.getAgeDist();
             if (match.getTimeDist() > maxTime)
                 maxTime = match.getTimeDist();
-
         }
 
         for (Match match : matches) {
@@ -42,10 +37,13 @@ public class MatchCalculator extends AsyncTask<Void, Void, Void> {
         }
 
         matches.sort((o1, o2) -> Double.compare(o1.getGrade(), o2.getGrade()));
+        return matches;
+    }
 
-        Intent intent = new Intent(context, Prefer.class);
-        context.startActivity(intent);
-
-        return null;
+    // חזרה לתהליכון הראשי
+    @Override
+    protected void onPostExecute(List<Match> matches) {
+        super.onPostExecute(matches);
+        Control.showMatches(matches);
     }
 }

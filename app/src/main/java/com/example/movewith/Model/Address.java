@@ -1,6 +1,8 @@
 package com.example.movewith.Model;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     public String city;
     public String street;
     public int number;
@@ -17,6 +19,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return city + " " + number + ", " + city;
+        return street + " " + number + ", " + city;
     }
 }
