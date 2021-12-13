@@ -28,11 +28,20 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/contact"
+            android:id="@+id/contact_sms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/contact"
+            android:text="@string/contact_sms"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"/>
+
+        <Button
+            android:id="@+id/contact_whatsapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/contact_whatsapp"
             android:textColor="@color/black"
             android:backgroundTint="@color/white"/>
 

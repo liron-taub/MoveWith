@@ -12,15 +12,13 @@ import com.example.movewith.Control.Control;
 import com.example.movewith.Model.Driver;
 import com.example.movewith.Model.Hitchhiker;
 import com.example.movewith.Model.Match;
-import com.example.movewith.Model.MatchCalculator;
 import com.example.movewith.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Prefer extends AppCompatActivity {
-    RecyclerView matchesView;
+    RecyclerView matchesView;// ממחזר את התצוגה של התוצאות
     LinearLayout loading;
 
     @Override

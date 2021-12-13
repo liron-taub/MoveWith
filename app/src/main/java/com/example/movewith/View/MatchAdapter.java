@@ -15,7 +15,7 @@ import com.example.movewith.R;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-
+// מחלקה שיודעת להציג את הרשימה של התוצאות של ההתאמות
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
     private List<Driver> mData;
     private LayoutInflater mInflater;

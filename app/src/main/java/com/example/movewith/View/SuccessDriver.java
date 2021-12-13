@@ -19,7 +19,7 @@ public class SuccessDriver extends AppCompatActivity {
 
         MediaPlayer ring = MediaPlayer.create(this, R.raw.claps);
         ring.start();
-
+// רטט
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE));
     }

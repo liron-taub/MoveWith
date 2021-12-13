@@ -3,6 +3,7 @@ package com.example.movewith.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.movewith.Model.Driver;
 import com.example.movewith.R;
+
+import java.net.URLEncoder;
 
 public class Finish extends AppCompatActivity {
 
@@ -29,10 +32,20 @@ public class Finish extends AppCompatActivity {
         builder.append("אשמח להצטרף איתך לנסיעה אל ");
         builder.append(driver.destination);
 
-        Button button = findViewById(R.id.contact);
-        button.setOnClickListener(v -> {
+        Button sms = findViewById(R.id.contact_sms);
+        sms.setOnClickListener(v -> {
             SmsManager manager = SmsManager.getDefault();
             manager.sendTextMessage(driver.phoneNumber, null, builder.toString(), null, null);
+        });
+
+        Button whatsapp = findViewById(R.id.contact_whatsapp);
+        whatsapp.setOnClickListener(v -> {
+            String phone = driver.phoneNumber.substring(1);
+            String url = "http://wa.me/972" + phone + "?text=" + builder.toString();
+            url = URLEncoder.encode(url);
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
         });
     }
 }

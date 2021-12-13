@@ -19,12 +19,12 @@ import java.sql.Time;
 import java.util.Date;
 
 public class DriverActivity extends AppCompatActivity {
-
+// מסך של הנהג
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
-
+// השלמה אוטומטית של זכר או נקבה במין של הנהג
         String[] gender = {"זכר", "נקבה"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, gender);
         AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.gender_list);
@@ -35,7 +35,7 @@ public class DriverActivity extends AppCompatActivity {
             createDriver();
         });
     }
-
+// יוצרת נהג שמעלה את כל הנתונים עליו
     public void createDriver() {
         String fullName = ((EditText) findViewById(R.id.full_name)).getText().toString();
         String gender = ((EditText) findViewById(R.id.gender_list)).getText().toString();

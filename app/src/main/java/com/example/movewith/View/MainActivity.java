@@ -7,36 +7,22 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.movewith.Control.Control;
-import com.example.movewith.Model.Address;
-import com.example.movewith.Model.Driver;
 import com.example.movewith.Model.FirebaseManagement;
-import com.example.movewith.Model.Hitchhiker;
-import com.example.movewith.Model.Match;
-import com.example.movewith.Model.MatchCalculator;
 import com.example.movewith.R;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button lastDrive;
-    public static RequestQueue requestQueue;// התור שאליו נתעדף התאמות
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        requestQueue = Volley.newRequestQueue(this);
 
         Control.activity = this;
 
@@ -44,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         Button hitchhiker = findViewById(R.id.hitchhiker_button);
         lastDrive = findViewById(R.id.lastDrive_button);
 
-
+// אם נלחץ הכפתור של הנהג הוא מעביר למסך המתאים
         driver.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, DriverActivity.class);
             MainActivity.this.startActivity(myIntent);
         });
-
+// אם נלחץ הכפתור של הטרמפיסט הוא עובר למסך המתאים
         hitchhiker.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, HitchhikerActivity.class);
             MainActivity.this.startActivity(myIntent);
@@ -73,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseManagement.toLate(Control.lastDrive(), this);
     }
-
+// בדיקה מתי יש צורך לשים את הכפתור האדום ומתי לא
     public void refreshView() {
         if (!Control.lastDrive().equals("")) {
             lastDrive.setVisibility(View.VISIBLE);

@@ -24,7 +24,8 @@
     <string name="finish">Match complete, Contact information will be passed to both parties Have a nice trip.</string>
     <string name="date">date</string>
     <string name="lastDrive">lastDrive</string>
-    <string name="contact">Contact</string>
+    <string name="contact_sms">Contact via sms</string>
+    <string name="contact_whatsapp">Contact via Whatsapp</string>
     <!-- Strings used for fragments for navigation -->
 
 </resources>

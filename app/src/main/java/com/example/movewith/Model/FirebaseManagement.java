@@ -21,23 +21,25 @@ import java.util.Date;
 import java.util.List;
 
 public class FirebaseManagement {
+    //קישור לפרייבייס
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static void saveDriver(Driver driver, Activity activity) {
         db.collection("drivers")
+                // דוחף לתוך הקולקשיין את הנהג החדש אחרת אם לא הצליח אז כותב שלא הצליח
                 .add(driver)
                 .addOnSuccessListener(documentReference -> {
-                    SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("lastDrive", documentReference.getId());
-                    editor.apply();
+                    SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);//קישור לזיכרון של הפאלפון
+                    SharedPreferences.Editor editor = sharedPref.edit();// פותח את הקישור לעריכה
+                    editor.putString("lastDrive", documentReference.getId());// שומר את הנתונים על הזיכרון של הפאלפון ונותן id
+                    editor.apply();//שמור את השינויים שעשינו על הזיכרון
                     Control.driverUploaded(true);
                 })
                 .addOnFailureListener(e -> {
                     Control.driverUploaded(false);
                 });
     }
-
+//פונקציה שמקבלת id של נהג והיא מוחקת אותו(הכפתור האדום)
     public static void deleteDriver(String id, Activity activity) {
         db.collection("drivers").document(id).delete().addOnSuccessListener(command -> {
             SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
@@ -48,7 +50,7 @@ public class FirebaseManagement {
             Control.refreshView();
         });
     }
-
+// מחיקת נסיעה שעבר זמנה
     public static void toLate(String id, Activity activity) {
         if (id.equals("")) return;
 
@@ -66,7 +68,7 @@ public class FirebaseManagement {
             }
         });
     }
-
+// להוריד את כל הנתונים של הנהגים מהפיירבייס בשביל למצוא התאמה
     public static void downloadDrivers() {
         db.collection("drivers").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {

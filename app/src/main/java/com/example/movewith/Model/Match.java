@@ -41,7 +41,7 @@ public class Match {
         this.driver = driver;
         this.hitchhiker = hitchhiker;
     }
-
+// חישוב של מרחק באמצעות אתר אינטרנט api
     private void distance(Address address1, Address address2, String name) {
         String add1 = address1.street + " " + address1.number + ", " + address1.city;// מחזיק את המלל בשורה אחת
         String add2 = address2.street + " " + address2.number + ", " + address2.city;
@@ -70,7 +70,7 @@ public class Match {
             System.out.println(ex);
         }
     }
-
+// פונקציה שמחשבת את כל ההפרשים
     public void calculate() {
         distance(driver.source, hitchhiker.source, "srcDist");
         distance(driver.destination, hitchhiker.destination, "destDist");
@@ -110,7 +110,7 @@ public class Match {
     public void setTimeDist(double timeDist) {
         this.timeDist = timeDist;
     }
-
+// פונקציה שמביאה משקלים לאחר חישוב כל ההפרשים והנירמול שלהם
     public double getGrade() {
         return srcDist * 0.2 + destDist * 0.2 + ageDist * 0.1 + gender * 0.1 + timeDist * 0.4;
 
