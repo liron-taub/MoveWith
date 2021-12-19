@@ -3,16 +3,8 @@ package com.example.movewith.Model;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.movewith.Control.Control;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,18 +31,20 @@ public class FirebaseManagement {
                     Control.driverUploaded(false);
                 });
     }
-//פונקציה שמקבלת id של נהג והיא מוחקת אותו(הכפתור האדום)
-    public static void deleteDriver(String id, Activity activity) {
-        db.collection("drivers").document(id).delete().addOnSuccessListener(command -> {
+
+    //פונקציה שמקבלת id של נהג והיא מוחקת אותו(הכפתור האדום)
+    public static void cancelDriver(String id, Activity activity) {
+        db.collection("drivers").document(id).update("canceled", true).addOnSuccessListener(command -> {
             SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear();
+            editor.remove("lastDrive");
             editor.apply();
 
             Control.refreshView();
         });
     }
-// מחיקת נסיעה שעבר זמנה
+
+    // מחיקת נסיעה שעבר זמנה
     public static void toLate(String id, Activity activity) {
         if (id.equals("")) return;
 
@@ -60,7 +54,7 @@ public class FirebaseManagement {
                 if (document != null) {
                     Driver driver = task.getResult().toObject(Driver.class);
                     if (driver != null && driver.time.before(new Date())) {  //TODO: להוסיף זמן השהייה
-                        deleteDriver(id, activity);
+                        cancelDriver(id, activity);
                     } else {
                         Control.refreshView();
                     }
@@ -68,16 +62,20 @@ public class FirebaseManagement {
             }
         });
     }
-// להוריד את כל הנתונים של הנהגים מהפיירבייס בשביל למצוא התאמה
+
+    // להוריד את כל הנתונים של הנהגים מהפיירבייס בשביל למצוא התאמה
     public static void downloadDrivers() {
-        db.collection("drivers").get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                List<Driver> drivers = task.getResult().toObjects(Driver.class);
-                Control.findMatch(drivers);
-            }
-            else {
-                Control.findMatch(new ArrayList<>());
-            }
-        });
+        db.collection("drivers")
+                .whereEqualTo("canceled", false)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Driver> drivers = task.getResult().toObjects(Driver.class);
+
+                        Control.findMatch(drivers);
+                    } else {
+                        Control.findMatch(new ArrayList<>());
+                    }
+                });
     }
 }

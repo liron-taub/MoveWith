@@ -12,6 +12,7 @@ public class Driver implements Serializable {
     public Date time;
     public Address source;
     public Address destination;
+    public boolean canceled;
 
     public Driver(String fullName, String gender, int age, String phoneNumber, double price, Date time, Address source, Address destination) {
         this.fullName = fullName;
@@ -22,6 +23,7 @@ public class Driver implements Serializable {
         this.time = time;
         this.source = source;
         this.destination = destination;
+        this.canceled = false;
     }
 
     public Driver() {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.movewith.Model.Driver;
 import com.example.movewith.R;
@@ -36,14 +37,15 @@ public class Finish extends AppCompatActivity {
         sms.setOnClickListener(v -> {
             SmsManager manager = SmsManager.getDefault();
             manager.sendTextMessage(driver.phoneNumber, null, builder.toString(), null, null);
+            Toast.makeText(this, "ההודעה נשלחה", Toast.LENGTH_SHORT).show();
         });
 
         Button whatsapp = findViewById(R.id.contact_whatsapp);
         whatsapp.setOnClickListener(v -> {
             String phone = driver.phoneNumber.substring(1);
-            String url = "http://wa.me/972" + phone + "?text=" + builder.toString();
-            url = URLEncoder.encode(url);
-            Uri uri = Uri.parse(url);
+            String url = "http://wa.me/+972" + phone + "?text=";
+            String encoded = URLEncoder.encode(builder.toString());
+            Uri uri = Uri.parse(url + encoded);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         });

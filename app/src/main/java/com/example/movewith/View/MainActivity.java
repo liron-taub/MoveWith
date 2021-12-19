@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.movewith.Control.Control;
 import com.example.movewith.Model.FirebaseManagement;
 import com.example.movewith.R;
@@ -30,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
         Button hitchhiker = findViewById(R.id.hitchhiker_button);
         lastDrive = findViewById(R.id.lastDrive_button);
 
-// אם נלחץ הכפתור של הנהג הוא מעביר למסך המתאים
+        // אם נלחץ הכפתור של הנהג הוא מעביר למסך המתאים
         driver.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, DriverActivity.class);
             MainActivity.this.startActivity(myIntent);
         });
-// אם נלחץ הכפתור של הטרמפיסט הוא עובר למסך המתאים
+        // אם נלחץ הכפתור של הטרמפיסט הוא עובר למסך המתאים
         hitchhiker.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, HitchhikerActivity.class);
             MainActivity.this.startActivity(myIntent);
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     .setMessage("האם ברצונך למחוק את הנסיעה המתוכננת האחרונה שהעלת?")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            FirebaseManagement.deleteDriver(Control.lastDrive(), activity);
+                            FirebaseManagement.cancelDriver(Control.lastDrive(), activity);
                         }
                     })
 
@@ -59,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseManagement.toLate(Control.lastDrive(), this);
     }
-// בדיקה מתי יש צורך לשים את הכפתור האדום ומתי לא
+
+    // בדיקה מתי יש צורך לשים את הכפתור האדום ומתי לא
     public void refreshView() {
         if (!Control.lastDrive().equals("")) {
             lastDrive.setVisibility(View.VISIBLE);
