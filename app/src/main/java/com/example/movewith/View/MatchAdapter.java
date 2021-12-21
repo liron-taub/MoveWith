@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.movewith.Model.Driver;
 import com.example.movewith.R;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 // מחלקה שיודעת להציג את הרשימה של התוצאות של ההתאמות
@@ -72,8 +75,13 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             src.setText(driver.source.toString());
             dest.setText(driver.destination.toString());
             age.setText((driver.gender.equals("זכר") ? " בן " : " בת ") + driver.age);
-            time.setText(new SimpleDateFormat("kk:mm").format(driver.time));
             price.setText(driver.price + "₪");
+
+            Date date = new Date();
+            String day = "מחר ב";
+            if(date.getDay() == driver.time.getDay())
+                day = "היום ב";
+            time.setText(day + new SimpleDateFormat("kk:mm").format(driver.time));
         }
 
         @Override

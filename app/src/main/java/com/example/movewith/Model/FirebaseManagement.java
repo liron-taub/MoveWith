@@ -53,7 +53,7 @@ public class FirebaseManagement {
                 DocumentSnapshot document = task.getResult();
                 if (document != null) {
                     Driver driver = task.getResult().toObject(Driver.class);
-                    if (driver != null && driver.time.before(new Date())) {  //TODO: להוסיף זמן השהייה
+                    if (driver != null && driver.time.before(new Date())) {
                         cancelDriver(id, activity);
                     } else {
                         Control.refreshView();
@@ -66,7 +66,7 @@ public class FirebaseManagement {
     // להוריד את כל הנתונים של הנהגים מהפיירבייס בשביל למצוא התאמה
     public static void downloadDrivers() {
         db.collection("drivers")
-                .whereEqualTo("canceled", false)
+                .whereGreaterThanOrEqualTo("time", new Date())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

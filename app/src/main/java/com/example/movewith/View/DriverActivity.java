@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -11,17 +13,22 @@ import android.widget.Toast;
 
 import com.example.movewith.Control.Control;
 import com.example.movewith.Model.Address;
+import com.example.movewith.Model.Consts;
 import com.example.movewith.Model.Driver;
 import com.example.movewith.Model.FirebaseManagement;
 import com.example.movewith.Model.GPSLocation;
+import com.example.movewith.Model.MemoryAccess;
 import com.example.movewith.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Time;
+import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DriverActivity extends AppCompatActivity {
-    EditText city, street, number;
+    EditText city, street, number, fullName, ageString, phoneNumber;
+    AutoCompleteTextView gender;
     GPSLocation gpsLocation;
 
     // מסך של הנהג
@@ -31,10 +38,10 @@ public class DriverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_driver);
 
         // השלמה אוטומטית של זכר או נקבה במין של הנהג
-        String[] gender = {"זכר", "נקבה"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, gender);
-        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.gender_list);
-        textView.setAdapter(adapter);
+        String[] genders = {"זכר", "נקבה"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, genders);
+        gender = findViewById(R.id.gender_list);
+        gender.setAdapter(adapter);
 
         city = findViewById(R.id.city);
         street = findViewById(R.id.steet_src);
@@ -45,32 +52,108 @@ public class DriverActivity extends AppCompatActivity {
 
         FloatingActionButton next = findViewById(R.id.next_page);
         next.setOnClickListener(v -> {
+            Toast.makeText(this, "מעלה את הנתונים לשרת", Toast.LENGTH_LONG).show();
             createDriver();
+            next.setEnabled(false);
         });
+
+        fullName = findViewById(R.id.full_name);
+        ageString = findViewById(R.id.age);
+        phoneNumber = findViewById(R.id.phone_number);
+
+        fullName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.driverFullName, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        ageString.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.driverAge, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        phoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.driverPhone, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        gender.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.driverGender, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        fullName.setText(MemoryAccess.loadFromMemory(Consts.driverFullName));
+        ageString.setText(MemoryAccess.loadFromMemory(Consts.driverAge));
+        phoneNumber.setText(MemoryAccess.loadFromMemory(Consts.driverPhone));
+        gender.setText(MemoryAccess.loadFromMemory(Consts.driverGender));
     }
 
     // יוצרת נהג שמעלה את כל הנתונים עליו
     public void createDriver() {
-        String fullName = ((EditText) findViewById(R.id.full_name)).getText().toString();
+        String fullName = (this.fullName).getText().toString();
         if (fullName.length() == 0) {
             Toast.makeText(this, "שדה השם ריק", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String gender = ((EditText) findViewById(R.id.gender_list)).getText().toString();
+        String gender = this.gender.getText().toString();
         if (gender.length() == 0) {
             Toast.makeText(this, "שדה המין ריק", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String ageString = ((EditText) findViewById(R.id.age)).getText().toString();
+        String ageString = this.ageString.getText().toString();
         if (ageString.length() == 0) {
             Toast.makeText(this, "שדה הגיל ריק", Toast.LENGTH_SHORT).show();
             return;
         }
         int age = Integer.parseInt(ageString);
 
-        String phoneNumber = ((EditText) findViewById(R.id.phone_number)).getText().toString();
+        String phoneNumber = this.phoneNumber.getText().toString();
         if (!phoneNumber.matches("^05\\d([-]?)\\d{7}$")) {
             Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_SHORT).show();
             return;
@@ -95,6 +178,14 @@ public class DriverActivity extends AppCompatActivity {
         if (timeArray.length > 2)
             second = Integer.parseInt(timeArray[2]);
         Date time = new Date();
+        LocalTime refTime = LocalTime.of(hour, minute, second);
+        LocalTime now = LocalTime.now();
+        if (now.isAfter(refTime)) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(time);
+            c.add(Calendar.DATE, 1);
+            time = c.getTime();
+        }
         time.setHours(hour);
         time.setMinutes(minute);
         time.setSeconds(second);

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -11,16 +13,18 @@ import android.widget.Toast;
 
 import com.example.movewith.Control.Control;
 import com.example.movewith.Model.Address;
+import com.example.movewith.Model.Consts;
 import com.example.movewith.Model.Driver;
 import com.example.movewith.Model.GPSLocation;
 import com.example.movewith.Model.Hitchhiker;
+import com.example.movewith.Model.MemoryAccess;
 import com.example.movewith.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Date;
 
 public class HitchhikerActivity extends AppCompatActivity {
-    EditText city, street, number;
+    EditText city, street, number, fullName, phoneNumber;
     GPSLocation gpsLocation;
 
     @Override
@@ -40,14 +44,52 @@ public class HitchhikerActivity extends AppCompatActivity {
         gpsLocation = new GPSLocation();
         gpsLocation.setUp(city, street, number, this, null, null);
 
-        FloatingActionButton next= findViewById(R.id.next_page);
+        FloatingActionButton next = findViewById(R.id.next_page);
         next.setOnClickListener(v -> {
             createHitchhiker();
         });
+
+        fullName = findViewById(R.id.full_name);
+        phoneNumber = findViewById(R.id.phone_number);
+
+        fullName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.hitchhikerFullName, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        phoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MemoryAccess.saveToMemory(Consts.hitchhikerPhone, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        fullName.setText(MemoryAccess.loadFromMemory(Consts.hitchhikerFullName));
+        phoneNumber.setText(MemoryAccess.loadFromMemory(Consts.hitchhikerPhone));
     }
 
     public void createHitchhiker() {
-        String fullName = ((EditText) findViewById(R.id.full_name)).getText().toString();
+        String fullName = this.fullName.getText().toString();
         if (fullName.length() == 0) {
             Toast.makeText(this, "שדה השם ריק", Toast.LENGTH_SHORT).show();
             return;
@@ -66,7 +108,7 @@ public class HitchhikerActivity extends AppCompatActivity {
         }
         int age = Integer.parseInt(ageString);
 
-        String phoneNumber = ((EditText) findViewById(R.id.phone_number)).getText().toString();
+        String phoneNumber = this.phoneNumber.getText().toString();
         if (!phoneNumber.matches("^05\\d([-]?)\\d{7}$")) {
             Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_SHORT).show();
             return;

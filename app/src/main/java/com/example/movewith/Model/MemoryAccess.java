@@ -6,10 +6,22 @@ import android.content.SharedPreferences;
 
 public class MemoryAccess {
     static SharedPreferences.Editor editor;
-    static Activity activity;
+    static SharedPreferences preferences;
+    static public Activity activity;
 
-    static private void openEditor() {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
+    static public void saveToMemory(String key, String value) {
+        if (editor == null) {
+            SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+            editor = sharedPref.edit();
+        }
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    static public String loadFromMemory(String key) {
+        if (preferences == null) {
+            preferences = activity.getPreferences(Context.MODE_PRIVATE);
+        }
+        return preferences.getString(key, "");
     }
 }

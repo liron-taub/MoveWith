@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.example.movewith.Control.Control;
 import com.example.movewith.Model.FirebaseManagement;
+import com.example.movewith.Model.MemoryAccess;
 import com.example.movewith.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Control.activity = this;
+        MemoryAccess.activity = this;
 
         Button driver = findViewById(R.id.driver_button);
         Button hitchhiker = findViewById(R.id.hitchhiker_button);
