@@ -25,6 +25,7 @@ import java.util.Date;
 
 public class HitchhikerActivity extends AppCompatActivity {
     EditText city, street, number, fullName, phoneNumber;
+    FloatingActionButton next;
     GPSLocation gpsLocation;
 
     @Override
@@ -44,7 +45,7 @@ public class HitchhikerActivity extends AppCompatActivity {
         gpsLocation = new GPSLocation();
         gpsLocation.setUp(city, street, number, this, null, null);
 
-        FloatingActionButton next = findViewById(R.id.next_page);
+        next = findViewById(R.id.next_page);
         next.setOnClickListener(v -> {
             createHitchhiker();
         });
@@ -173,6 +174,7 @@ public class HitchhikerActivity extends AppCompatActivity {
 
         Hitchhiker hitchhiker = new Hitchhiker(fullName, gender, age, phoneNumber, time, source, destination);
 
+        next.setEnabled(false);
         Intent intent = new Intent(this, Prefer.class);
         intent.putExtra("hitchhiker", hitchhiker);
         startActivity(intent);

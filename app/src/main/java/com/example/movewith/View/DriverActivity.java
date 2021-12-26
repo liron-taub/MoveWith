@@ -28,6 +28,7 @@ import java.util.Date;
 
 public class DriverActivity extends AppCompatActivity {
     EditText city, street, number, fullName, ageString, phoneNumber;
+    FloatingActionButton next;
     AutoCompleteTextView gender;
     GPSLocation gpsLocation;
 
@@ -50,11 +51,10 @@ public class DriverActivity extends AppCompatActivity {
         gpsLocation = new GPSLocation();
         gpsLocation.setUp(city, street, number, this, null, null);
 
-        FloatingActionButton next = findViewById(R.id.next_page);
+        next = findViewById(R.id.next_page);
         next.setOnClickListener(v -> {
             Toast.makeText(this, "מעלה את הנתונים לשרת", Toast.LENGTH_LONG).show();
             createDriver();
-            next.setEnabled(false);
         });
 
         fullName = findViewById(R.id.full_name);
@@ -231,6 +231,7 @@ public class DriverActivity extends AppCompatActivity {
 
         Address destination = new Address(city, street, number);
 
+        next.setEnabled(false);
         Driver driver = new Driver(fullName, gender, age, phoneNumber, price, time, source, destination);
         Control.saveDriver(driver);
     }
