@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FirebaseManagement {
     //קישור לפרייבייס
@@ -66,15 +67,15 @@ public class FirebaseManagement {
     // להוריד את כל הנתונים של הנהגים מהפיירבייס בשביל למצוא התאמה
     public static void downloadDrivers() {
         db.collection("drivers")
-                .whereGreaterThanOrEqualTo("time", new Date())
-                .get()
+                .whereGreaterThanOrEqualTo("time", new Date())// לוקחים את הנהגים שהזמן שלהם לא עבר
+                .get()//// אוטומטית גורם לתהליכון נפרד
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<Driver> drivers = task.getResult().toObjects(Driver.class);
-
-                        Control.findMatch(drivers);
+                        List<Driver> temp = task.getResult().toObjects(Driver.class);
+                        List<Driver> drivers = temp.stream().filter(driver -> !driver.canceled).collect(Collectors.toList());
+                        Control.findMatch(drivers);// אם זה הצליח שולחים את הרישמה לפונקציה
                     } else {
-                        Control.findMatch(new ArrayList<>());
+                        Control.findMatch(new ArrayList<>());// אם לא הצליח אז רשימה ריקה
                     }
                 });
     }

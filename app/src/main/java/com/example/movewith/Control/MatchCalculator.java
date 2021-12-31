@@ -37,7 +37,7 @@ public class MatchCalculator extends AsyncTask<List<Match>, Void, List<Match>> {
             match.setAgeDist(maxAge == 0 ? 0 : match.getAgeDist() / maxAge);
         }
 
-        matches.sort((o1, o2) -> Double.compare(o1.getGrade(), o2.getGrade()));
+        matches.sort((o1, o2) -> Double.compare(o1.getGrade(), o2.getGrade()));// מיון הציון הכי נמוך להכי גבוהה-כך שההתאמה הטובה ביותר תופיעה ראשונה
         return matches;
     }
 

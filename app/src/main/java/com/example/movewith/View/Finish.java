@@ -22,7 +22,8 @@ public class Finish extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish);
 
-        Driver driver = (Driver) getIntent().getSerializableExtra("driver");
+        Driver driver = (Driver) getIntent().getSerializableExtra("driver");//על מנת לעבור ממסך למסך עם התנונים צריך להעביר אותם בביטים -
+                                                               // בחרנו את הנהג שאיתו נרצה לנסוע - ולכן ניקח אותו למסך הסופי כדי שנשלח לו הודעה
         TextView view = findViewById(R.id.msg);
         view.setText("בחרת לנסוע עם " + driver.fullName + ", לחץ על הכפתור כדי ליצור קשר");
 
@@ -51,6 +52,7 @@ public class Finish extends AppCompatActivity {
         });
     }
 
+    //לחזור למסך הראשי בסיום בחירת הנסיעה ושליחת ההודעות
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);

@@ -31,35 +31,35 @@ public class Control {
     // פוקנציה שמטרת לבדוק שפרטי הנהג הועלו בהצלחה.
     public static void driverUploaded(boolean success) {
         if (success) {
-            Intent myIntent = new Intent(activity, SuccessDriver.class);
+            Intent myIntent = new Intent(activity, SuccessDriver.class);// מעביר למסך של הצליח לעלות
             myIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            activity.startActivity(myIntent);
+            activity.startActivity(myIntent);// פתיחת המסך שאליו עברנו
         } else {
             Toast.makeText(activity, "לא הצלחנו להעלות את הנתונים, נסה שוב", Toast.LENGTH_SHORT).show();
         }
-        refreshView();
+        refreshView();// מרענן את המס על מנת שהכפתור האדום יופיע
     }
 
     // מקבל מהזיכרון את הנסיעה האחרונה שהועלתה
     public static String lastDrive() {
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString("lastDrive", "");
+        return sharedPref.getString("lastDrive", "");// אם אין שום נסיעה אחרונה תחזיר סטרינג ריק אחרת תחזיר את הנסיעה עצמה
     }
 
     // פונקציה שמתחילה את החיפוש
     public static void startMatch(Hitchhiker hitchhiker, Prefer prefer) {
         Control.hitchhiker = hitchhiker;
         Control.prefer = prefer;
-        FirebaseManagement.downloadDrivers();
+        FirebaseManagement.downloadDrivers();// רצה בתהליכון נפרד כדי לא לתקוע את האפליקציה
     }
 
     // יוצר רשימה של התאמות ואז מפעיל את הפונקציה של החישוב עצמו שמביא לנו לפי דירוג מסוים את ההתאמות.
     public static void findMatch(List<Driver> drivers) {
-        ArrayList<Match> matches = new ArrayList<>();
+        ArrayList<Match> matches = new ArrayList<>();// יצירת רשימה חדשה של התאמות
         for (Driver driver : drivers) {
-            matches.add(new Match(driver, Control.hitchhiker));
+            matches.add(new Match(driver, Control.hitchhiker));// מחקה מאצ' עושה מופע למחלקה כדי שנשלח את זה לקבלת ציון
         }
-        new MatchCalculator().execute(matches);
+        new MatchCalculator().execute(matches);// רץ בתהליכון נפרד, מפעיל את החישובים לניתן ציון
     }
 
     //פונקציה שמראה את כל ההתאומות שנמצאו

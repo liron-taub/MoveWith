@@ -96,25 +96,26 @@ public class HitchhikerActivity extends AppCompatActivity {
             return;
         }
 
-        String gender = ((EditText) findViewById(R.id.gender_list)).getText().toString();
-        if (gender.length() == 0) {
-            Toast.makeText(this, "שדה המין ריק", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String ageString = ((EditText) findViewById(R.id.age)).getText().toString();
-        if (ageString.length() == 0) {
-            Toast.makeText(this, "שדה הגיל ריק", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        int age = Integer.parseInt(ageString);
-
         String phoneNumber = this.phoneNumber.getText().toString();
         if (!phoneNumber.matches("^05\\d([-]?)\\d{7}$")) {
             Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        String city = ((EditText) findViewById(R.id.city)).getText().toString();
+        if (city.length() == 0) {
+            Toast.makeText(this, "שדה העיר ריק", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String street = ((EditText) findViewById(R.id.steet_src)).getText().toString();
+        if (street.length() == 0) {
+            Toast.makeText(this, "שדה הרחוב ריק", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String numberString = ((EditText) findViewById(R.id.number_src)).getText().toString();
+        if (numberString.length() == 0) {
+            Toast.makeText(this, "שדה מספר ריק", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String timeString = ((EditText) findViewById(R.id.time)).getText().toString();
         if (!timeString.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
             Toast.makeText(this, "השעה אינה תקינה", Toast.LENGTH_SHORT).show();
@@ -131,23 +132,12 @@ public class HitchhikerActivity extends AppCompatActivity {
         time.setMinutes(minute);
         time.setSeconds(second);
 
-        String street = ((EditText) findViewById(R.id.steet_src)).getText().toString();
-        if (street.length() == 0) {
-            Toast.makeText(this, "שדה הרחוב ריק", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String city = ((EditText) findViewById(R.id.city)).getText().toString();
+        city = ((EditText) findViewById(R.id.city_dest)).getText().toString();
         if (city.length() == 0) {
             Toast.makeText(this, "שדה העיר ריק", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String numberString = ((EditText) findViewById(R.id.number_src)).getText().toString();
-        if (numberString.length() == 0) {
-            Toast.makeText(this, "שדה מספר ריק", Toast.LENGTH_SHORT).show();
-            return;
-        }
         int number = Integer.parseInt(numberString);
         Address source = new Address(city, street, number);
 
@@ -156,13 +146,6 @@ public class HitchhikerActivity extends AppCompatActivity {
             Toast.makeText(this, "שדה הרחוב ריק", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        city = ((EditText) findViewById(R.id.city_dest)).getText().toString();
-        if (city.length() == 0) {
-            Toast.makeText(this, "שדה העיר ריק", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         numberString = ((EditText) findViewById(R.id.number_dest)).getText().toString();
         if (numberString.length() == 0) {
             Toast.makeText(this, "שדה מספר ריק", Toast.LENGTH_SHORT).show();
@@ -171,6 +154,19 @@ public class HitchhikerActivity extends AppCompatActivity {
         number = Integer.parseInt(numberString);
 
         Address destination = new Address(city, street, number);
+
+        String ageString = ((EditText) findViewById(R.id.age)).getText().toString();
+        if (ageString.length() == 0) {
+            Toast.makeText(this, "שדה הגיל ריק", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int age = Integer.parseInt(ageString);
+
+        String gender = ((EditText) findViewById(R.id.gender_list)).getText().toString();
+        if (gender.length() == 0) {
+            Toast.makeText(this, "שדה המין ריק", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Hitchhiker hitchhiker = new Hitchhiker(fullName, gender, age, phoneNumber, time, source, destination);
 

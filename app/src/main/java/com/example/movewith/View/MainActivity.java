@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             Intent myIntent = new Intent(MainActivity.this, HitchhikerActivity.class);
             MainActivity.this.startActivity(myIntent);
         });
-
+//דיאלוג
         Activity activity = this;
         lastDrive.setOnClickListener(v -> {
             new AlertDialog.Builder(this)

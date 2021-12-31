@@ -12,7 +12,7 @@ public class Address implements Serializable {
         this.street = street;
         this.number = number;
     }
-// בנאי ריק בשביל הפיירבייס שצריך להכניס אליו נתונים
+// בנאי ריק בשביל הפיירבייס שצריך להכניס אליו נתונים הוא דורשש בנאי ריק
     public Address() {
 
     }

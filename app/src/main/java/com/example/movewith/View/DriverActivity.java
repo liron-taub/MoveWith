@@ -27,9 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DriverActivity extends AppCompatActivity {
-    EditText city, street, number, fullName, ageString, phoneNumber;
+    EditText city, street, number, fullName, ageString, phoneNumber;// תיבת טקסט שניתן להקליד בתוכה
     FloatingActionButton next;
-    AutoCompleteTextView gender;
+    AutoCompleteTextView gender;// השלמה אוטומטית למין
     GPSLocation gpsLocation;
 
     // מסך של הנהג
@@ -40,10 +40,11 @@ public class DriverActivity extends AppCompatActivity {
 
         // השלמה אוטומטית של זכר או נקבה במין של הנהג
         String[] genders = {"זכר", "נקבה"};
+        //לוקח רשימה של סטרינג ויודע להשלים , יודע להציב את הערכים
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, genders);
         gender = findViewById(R.id.gender_list);
         gender.setAdapter(adapter);
-
+// ממיר את האקסמל לאוביקט של גאבה
         city = findViewById(R.id.city);
         street = findViewById(R.id.steet_src);
         number = findViewById(R.id.number_src);
@@ -61,6 +62,7 @@ public class DriverActivity extends AppCompatActivity {
         ageString = findViewById(R.id.age);
         phoneNumber = findViewById(R.id.phone_number);
 
+        // כל פעם שמזהה שינוי בתיבת טקסט הוא שומר את זה בזיכרון
         fullName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,14 +127,14 @@ public class DriverActivity extends AppCompatActivity {
 
             }
         });
-
+// ברגע שהמסך עולה אז מעלים מהזיכרון את התנונים הקודמים ששמורים בו
         fullName.setText(MemoryAccess.loadFromMemory(Consts.driverFullName));
         ageString.setText(MemoryAccess.loadFromMemory(Consts.driverAge));
         phoneNumber.setText(MemoryAccess.loadFromMemory(Consts.driverPhone));
         gender.setText(MemoryAccess.loadFromMemory(Consts.driverGender));
     }
 
-    // יוצרת נהג שמעלה את כל הנתונים עליו
+    // יוצרת נהג שמעלה את כל הנתונים עליו תוך בדיקה שמילא את כל השדות נכון
     public void createDriver() {
         String fullName = (this.fullName).getText().toString();
         if (fullName.length() == 0) {
@@ -154,7 +156,7 @@ public class DriverActivity extends AppCompatActivity {
         int age = Integer.parseInt(ageString);
 
         String phoneNumber = this.phoneNumber.getText().toString();
-        if (!phoneNumber.matches("^05\\d([-]?)\\d{7}$")) {
+        if (!phoneNumber.matches("^05\\d([-]?)\\d{7}$")) {// ביטוי ריגולארי
             Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -230,12 +232,12 @@ public class DriverActivity extends AppCompatActivity {
         number = Integer.parseInt(numberString);
 
         Address destination = new Address(city, street, number);
-
+//ברגע שכל הקהלטים תקינים - מכניס את כל הנתונים לנהג בפרייבייס
         next.setEnabled(false);
         Driver driver = new Driver(fullName, gender, age, phoneNumber, price, time, source, destination);
         Control.saveDriver(driver);
     }
-
+//פונקציה של האטיביתי שקוראים לה שהמסך ניסגר
     @Override
     protected void onDestroy() {
         super.onDestroy();

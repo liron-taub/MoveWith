@@ -22,7 +22,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 import java.util.Locale;
-
+// מטרת המחלקה למצוא את המיקום האוטומטי של איפה שאנחנו נמצאים
 public class GPSLocation extends Activity implements LocationListener {
 
     // Acquire a reference to the system Location Manager
@@ -35,6 +35,7 @@ public class GPSLocation extends Activity implements LocationListener {
     private LinearLayout GPSon;
     private LinearLayout GPSoff;
 
+    // לאתחל את כל השדות
     public void setUp(EditText _city, EditText _street, EditText _number, Context _context, LinearLayout _GPSon, LinearLayout _GPSoff) {
         city = _city;
         street = _street;
@@ -43,20 +44,20 @@ public class GPSLocation extends Activity implements LocationListener {
         GPSon = _GPSon;
         GPSoff = _GPSoff;
 
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);// פונקציה של אדרואיד שיודעת לזהות את המיקום האוטומטי לוקח את זה מתוך הקונטקסט
 
-        // Check the SDK version and whether the permission is already granted or not.
-        final LocationListener locationListener = this;
+        // בדיקה שיש הרשאה לגי פי אס
         if (ActivityCompat.checkSelfPermission((Activity) context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission((Activity) context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS}, 5);
         } else {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);// מתחיל להאזין לשינויים של הגי פי אס במידה וקיימת הרשאה
         }
     }
 
     @SuppressLint("MissingPermission")
     @Override
+    // פונקציה שאם לא היה הרשאה אז מחכים להרשאה ומתחילים להאזין לשינויים של הגי פי אס
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 5) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -67,7 +68,7 @@ public class GPSLocation extends Activity implements LocationListener {
             Toast.makeText(getApplicationContext(), "Until you grant the permission, we cannot display the location", Toast.LENGTH_SHORT).show();
         }
     }
-
+// לוקח את המיקום וממיר את המיקום לטקסט
     public void updateTextViews(Location location) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<android.location.Address> addresses = null;
@@ -86,7 +87,7 @@ public class GPSLocation extends Activity implements LocationListener {
         }
     }
 
-
+// מונקציה שמפרידה לפי פיסיקים ומחזיר את רחוב ומספר
     private String[] splitNumberFromStreet(String numberAndStreet) {
         String[] result = {"", ""};
         String[] splitedAddress = numberAndStreet.split(" ");
@@ -115,7 +116,7 @@ public class GPSLocation extends Activity implements LocationListener {
         Toast.makeText(context, "לזיהוי מיקום אוטמטי הפעל GPS", Toast.LENGTH_LONG).show();
     }
 
-    // Stop the inner listeners to avoid too much listeners
+    // כאשר רוצים להפסיק להקשיב לגי פי אס
     public void stopListeners() {
         locationManager.removeUpdates(this);
         locationManager = null;
